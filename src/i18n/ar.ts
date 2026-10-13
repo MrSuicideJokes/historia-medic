@@ -10,6 +10,7 @@ export const ar: Dict = {
   skip: 'الانتقال إلى المحتوى',
   nav: { home: 'الرئيسية', products: 'المنتجات', contact: 'اتصل بنا', cart: 'السلة', menu: 'القائمة الرئيسية' },
   langLabel: 'اللغة',
+  darkMode: 'الوضع الداكن',
   cartLink: (n) => (n ? `السلة، ${items(n)}` : 'السلة، فارغة'),
 
   categories: { 'pese-personne': 'موازين الأشخاص', tensiometres: 'أجهزة قياس الضغط', autres: 'منتجات أخرى' },
@@ -20,6 +21,8 @@ export const ar: Dict = {
     eyebrow: 'معدات طبية · قسنطينة',
     lead: 'معدات طبية ذات جودة في قسنطينة. اختاروا عبر الموقع، واطلبوا عبر واتساب.',
     cta: 'تصفّح المنتجات',
+    storefront: 'محلّنا في قسنطينة',
+    storefrontAlt: 'واجهة محل Historia Medic المضاءة في قسنطينة مساءً',
     categoriesTitle: 'الفئات',
     featuredTitle: 'مختارات',
     seeAll: 'كل المنتجات',
@@ -99,6 +102,12 @@ export const ar: Dict = {
     directions: 'الاتجاهات',
     mapLabel: 'خريطة موقع Historia Medic',
     mapHint: 'حرّكوا الخريطة بإصبعين.',
+  },
+
+  dock: {
+    label: 'سلّتكم',
+    view: 'عرض السلة',
+    added: 'أُضيف إلى السلة',
   },
 
   footer: { follow: 'تابعونا', contact: 'اتصل بنا' },

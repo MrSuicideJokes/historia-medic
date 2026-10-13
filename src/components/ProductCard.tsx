@@ -7,8 +7,8 @@ import { CheckIcon } from './icons';
 import { ProductImage } from './ProductImage';
 import { Stepper } from './Stepper';
 
-// Studio photos melt into the tile gradient (white × gradient = gradient); slight zoom on hover.
-const zoom = 'mix-blend-multiply transition-transform duration-500 ease-out group-hover:scale-[1.04]';
+// Slight zoom on hover; opacity is listed too so the 2nd-view crossfade keeps its transition.
+const zoom = 'transition-[transform,opacity] duration-500 ease-out group-hover:scale-[1.04]';
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -18,7 +18,7 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
   const strip = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
-  if (images.length === 1) return <div className="overflow-hidden bg-tile"><ProductImage name={images[0]} alt={alt} eager={eager} className={zoom} /></div>;
+  if (images.length === 1) return <div className="overflow-hidden bg-tile"><ProductImage name={images[0]} alt={alt} eager={eager} className={`mix-blend-multiply ${zoom}`} /></div>;
 
   const onScroll = () => {
     const el = strip.current!;
@@ -29,12 +29,14 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
 
   return (
     <div className="relative overflow-hidden bg-tile">
+      {/* The photo stack blends into the tile gradient as one layer (white × gradient = gradient).
+          Blending each photo separately would multiply the hovered view into the one below it. */}
       <div ref={strip} onScroll={onScroll} role="group" aria-label={t.product.photos}
-        className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] pointer-fine:grid pointer-fine:overflow-hidden">
+        className="flex snap-x snap-mandatory overflow-x-auto mix-blend-multiply overscroll-x-contain [scrollbar-width:none] pointer-fine:grid pointer-fine:overflow-hidden">
         {images.map((name, i) => (
           <ProductImage key={name} name={name} alt={i === 0 ? alt : ''} eager={eager && i === 0} secondary={i > 0}
             className={`${zoom} shrink-0 snap-start pointer-fine:[grid-area:1/1] ${
-              i === 1 ? 'pointer-fine:opacity-0 pointer-fine:transition-opacity pointer-fine:duration-300 pointer-fine:group-hover:opacity-100' : i > 1 ? 'pointer-fine:hidden' : ''
+              i === 1 ? 'pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100' : i > 1 ? 'pointer-fine:hidden' : ''
             }`} />
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { links, store } from '../config/store';
-import { categories, heroProductIds, productById, products } from '../data/products';
+import { categories, products } from '../data/products';
 import { usePageMeta } from '../lib/meta';
 import { useLang } from '../state/lang';
 import { ContactDetails } from '../components/ContactDetails';
@@ -12,9 +12,8 @@ import { LazyMap } from '../components/LazyMap';
 
 function Hero() {
   const { t, lang } = useLang();
-  const [main, a, b] = heroProductIds.map((id) => productById.get(id)!);
   return (
-    <section className="bg-hero">
+    <section className="overflow-x-clip bg-hero">
       <div className="wrap grid gap-12 pb-16 pt-10 md:grid-cols-12 md:items-center md:gap-8 md:pb-24 md:pt-16">
       <div className="md:col-span-7">
         <p className="eyebrow flex items-center gap-3">
@@ -47,21 +46,27 @@ function Hero() {
         </ul>
       </div>
 
-      {/* Three real catalogue photos, composed around the logo's double ring. */}
-      <div className="relative mx-2 aspect-square max-w-md md:col-span-5 md:mx-0 md:max-w-none">
-        <Rings className="absolute -inset-[4%] text-red" gap={70} />
-        {/* A soft blue disc behind the group, echoing the logo's round badge. */}
-        <span aria-hidden="true" className="absolute inset-[14%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--color-blue)_22%,transparent),transparent_70%)]" />
-        <div className="rise-in absolute start-[6%] top-[10%] w-[62%] overflow-hidden rounded-md bg-paper shadow-float">
-          <ProductImage name={main.images[0]} alt={main.name} eager sizes="(min-width: 48rem) 26vw, 60vw" />
+      {/* The shop itself, framed by the logo's double ring (the same badge as on its sign). */}
+      <figure className="relative mx-3 md:col-span-5 md:mx-0">
+        <Rings className="pointer-events-none absolute -inset-[6%] text-red" gap={70} />
+        <div className="relative animate-[slide-up_700ms_cubic-bezier(0.2,0.7,0.2,1)_both] overflow-hidden rounded-lg shadow-float">
+          <img
+            src="/images/storefront-800.webp"
+            srcSet="/images/storefront-480.webp 480w, /images/storefront-800.webp 800w, /images/storefront-1200.webp 1200w"
+            sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 40vw, 90vw"
+            width={1200}
+            height={1352}
+            alt={t.home.storefrontAlt}
+            fetchPriority="high"
+            decoding="async"
+            className="block h-auto w-full"
+          />
         </div>
-        <div className="rise-in absolute end-[4%] top-[4%] w-[30%] rotate-3 overflow-hidden rounded-md bg-paper shadow-float [animation-delay:120ms]">
-          <ProductImage name={a.images[0]} alt={a.name} eager sizes="(min-width: 48rem) 13vw, 30vw" />
-        </div>
-        <div className="rise-in absolute bottom-[8%] end-[8%] w-[38%] -rotate-2 overflow-hidden rounded-md bg-paper shadow-float [animation-delay:240ms]">
-          <ProductImage name={b.images[0]} alt={b.name} eager sizes="(min-width: 48rem) 16vw, 38vw" />
-        </div>
-      </div>
+        <figcaption className="absolute -bottom-4 start-4 inline-flex items-center gap-2 rounded-full border border-line bg-paper px-4 py-2 text-sm font-medium shadow-float">
+          <PinIcon width={16} height={16} className="text-red" />
+          {t.home.storefront}
+        </figcaption>
+      </figure>
       </div>
     </section>
   );

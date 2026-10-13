@@ -1,4 +1,4 @@
-import { createContext, use, useEffect, useMemo, useReducer, type ReactNode } from 'react';
+import { createContext, use, useEffect, useMemo, useReducer, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { productById, type Product } from '../data/products';
 
 export type Line = { id: string; qty: number };
@@ -58,12 +58,15 @@ type CartValue = {
   setQty: (id: string, qty: number) => void;
   remove: (id: string) => void;
   clear: () => void;
+  // The latest "add to cart", so the cart bar can confirm it. Not persisted.
+  lastAdded: { id: string; at: number } | null;
 };
 
 const CartContext = createContext<CartValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, dispatch] = useReducer(reducer, undefined, load);
+  const [lastAdded, setLastAdded] = useState<CartValue['lastAdded']>(null);
 
   useEffect(() => {
     try {
@@ -79,14 +82,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
       lines: full,
       count: full.reduce((s, l) => s + l.qty, 0),
       total: full.reduce((s, l) => s + l.qty * l.product.price, 0),
-      add: (id, qty) => dispatch({ type: 'add', id, qty }),
+      add: (id, qty) => {
+        dispatch({ type: 'add', id, qty });
+        setLastAdded({ id, at: Date.now() });
+      },
       setQty: (id, qty) => dispatch({ type: 'set', id, qty }),
       remove: (id) => dispatch({ type: 'remove', id }),
       clear: () => dispatch({ type: 'clear' }),
+      lastAdded,
     };
-  }, [lines]);
+  }, [lines, lastAdded]);
 
   return <CartContext value={value}>{children}</CartContext>;
 }
 
 export const useCart = () => use(CartContext)!;
+
+// false while hydrating prerendered HTML (whose cart is empty), true right after.
+// Cart-dependent UI renders its empty state until then, so hydration matches.
+export const useHydrated = () => useSyncExternalStore(() => () => {}, () => true, () => false);

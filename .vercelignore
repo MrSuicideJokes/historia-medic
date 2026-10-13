@@ -1,0 +1,8 @@
+# Originals and screenshots aren't needed to build (optimized copies live in public/images).
+assets
+screenshots
+node_modules
+dist
+dist-ssr
+.env*
+.vercel

@@ -15,7 +15,7 @@ function Chip({ active, label, count, onClick }: { active: boolean; label: strin
         active ? 'border-transparent btn-primary' : 'border-line-strong bg-paper text-ink hover:border-blue hover:text-blue'
       }`}>
       {label}
-      <span className={`tnum text-xs ${active ? 'text-paper/80' : 'text-muted'}`}>{count}</span>
+      <span className={`tnum text-xs ${active ? 'text-white/80' : 'text-muted'}`}>{count}</span>
     </button>
   );
 }

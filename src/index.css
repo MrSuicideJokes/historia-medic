@@ -3,6 +3,8 @@
 
 /* Mouse/trackpad devices (hover effects that would stick on touch). */
 @custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
+/* Theme is set on <html data-theme> before first paint (index.html). */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /* Design tokens. Colors sampled from the logo (blue #176198, red #E62E2A, cream #F2EEE6). */
 @theme {
@@ -18,6 +20,9 @@
   --color-cream: #f2eee6;        /* logo disc background */
   --color-line: #d3dce5;         /* hairline rules (decorative) */
   --color-line-strong: #76879a;  /* form control borders: 3.7:1 on paper */
+  /* Constant in both themes: text on filled buttons/badges, and filled red UI. */
+  --color-white: #ffffff;
+  --color-alert: #c0221e;        /* white on it: 6.0:1 */
   --color-current: currentColor;
   --color-transparent: transparent;
 
@@ -33,6 +38,22 @@
     40% { transform: scale(1.35); }
     100% { transform: scale(1); }
   }
+}
+
+/* Dark theme: deep navy surfaces; the logo blue and red lifted for text on dark (all AA, most AAA). */
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-ink: #e6edf4;          /* 15.3:1 on paper */
+  --color-muted: #9db0c2;        /* 8.1:1 */
+  --color-blue: #6cb0ea;         /* 7.8:1 */
+  --color-blue-strong: #9ccbf2;
+  --color-blue-tint: #13253a;
+  --color-red: #ff5b52;
+  --color-red-text: #ff8a80;     /* 7.9:1 */
+  --color-paper: #0c1724;
+  --color-cream: #1a2531;
+  --color-line: #22364b;
+  --color-line-strong: #6b829a;  /* 4.5:1 */
 }
 
 @layer base {
@@ -112,6 +133,12 @@
 .leaflet-bar { border: 1px solid var(--color-line-strong) !important; box-shadow: none !important; border-radius: var(--radius) !important; }
 .leaflet-bar a { width: 44px !important; height: 44px !important; line-height: 44px !important; color: var(--color-ink) !important; }
 .leaflet-control-attribution { font-size: 11px; }
+.leaflet-bar a { background-color: var(--color-paper) !important; }
+[data-theme='dark'] .leaflet-container { background: #0c1724; }
+/* Same OSM tiles, inverted into a night map. */
+[data-theme='dark'] .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(0.85) contrast(0.9); }
+[data-theme='dark'] .leaflet-control-attribution { background: rgb(12 23 36 / 0.8); color: var(--color-muted); }
+[data-theme='dark'] .leaflet-control-attribution a { color: var(--color-blue); }
 
 /* Text inputs and selects. 16px text stops iOS from zooming on focus. */
 @utility field {
@@ -170,12 +197,15 @@
 /* Photo tiles: white studio shots are multiplied onto a soft cool-to-white wash. */
 @utility bg-tile {
   background: linear-gradient(155deg, var(--color-paper) 35%, color-mix(in oklab, var(--color-blue-tint) 85%, var(--color-cream)) 100%);
+  /* Dark theme: keep a light "showroom" tile; white studio shots multiplied onto navy would turn murky. */
+  [data-theme='dark'] & { background: linear-gradient(155deg, #f4f7fa 35%, #dfe7ef 100%); }
 }
 
 @utility bg-footer {
   background:
     radial-gradient(70% 110% at 100% 0%, color-mix(in oklab, var(--color-blue) 55%, transparent), transparent 65%),
-    linear-gradient(165deg, var(--color-ink) 30%, #0a1828);
+    linear-gradient(165deg, #0e2338 30%, #0a1828);
+  [data-theme='dark'] & { background: radial-gradient(70% 110% at 100% 0%, rgb(23 97 152 / 0.45), transparent 65%), linear-gradient(165deg, #081320 30%, #050c15); }
 }
 
 /* Logo stripe: blue into red, as in the monogram. */
@@ -186,17 +216,17 @@
 
 /* Buttons (white text ≥ 4.9:1 on every stop). */
 @utility btn-primary {
-  color: var(--color-paper);
-  background-image: linear-gradient(135deg, #1f74b4 0%, var(--color-blue) 55%, var(--color-blue-strong) 100%);
-  box-shadow: 0 8px 18px -10px color-mix(in oklab, var(--color-blue) 80%, transparent);
+  color: var(--color-white);
+  background-image: linear-gradient(135deg, #1f74b4 0%, #176198 55%, #104a75 100%);
+  box-shadow: 0 8px 18px -10px rgb(23 97 152 / 0.8);
   transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
-  &:hover { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--color-blue) 90%, transparent); }
+  &:hover { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 12px 24px -12px rgb(23 97 152 / 0.9); }
   &:active { transform: translateY(0) scale(0.98); }
 }
 @utility btn-whatsapp {
-  color: var(--color-paper);
-  background-image: linear-gradient(135deg, #d02a24 0%, var(--color-red-text) 55%, #a51c18 100%);
-  box-shadow: 0 10px 22px -12px color-mix(in oklab, var(--color-red) 85%, transparent);
+  color: var(--color-white);
+  background-image: linear-gradient(135deg, #d02a24 0%, #c0221e 55%, #a51c18 100%);
+  box-shadow: 0 10px 22px -12px rgb(230 46 42 / 0.85);
   transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
   &:hover { filter: brightness(1.06); transform: translateY(-1px); }
   &:active { transform: translateY(0) scale(0.98); }

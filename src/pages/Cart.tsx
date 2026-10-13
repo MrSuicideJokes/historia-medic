@@ -96,7 +96,7 @@ export default function Cart() {
                 <div className="flex flex-wrap items-center gap-2 border border-red-text p-3">
                   <span className="mb-1 w-full text-sm font-medium">{t.cart.clearConfirm}</span>
                   <button type="button" onClick={() => { clear(); setConfirming(false); refocus(); }}
-                    className="min-h-11 rounded bg-red-text px-4 text-sm font-medium text-paper">
+                    className="min-h-11 rounded bg-alert px-4 text-sm font-medium text-white">
                     {t.cart.clearYes}
                   </button>
                   <button type="button" onClick={() => setConfirming(false)} className="min-h-11 rounded px-3 text-sm text-muted hover:text-ink">

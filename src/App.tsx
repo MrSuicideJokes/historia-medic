@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from 'react-router';
 import { useLang } from './state/lang';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { CartDock } from './components/CartDock';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import Cart from './pages/Cart';
@@ -43,6 +44,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <CartDock />
     </>
   );
 }

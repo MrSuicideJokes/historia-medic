@@ -19,6 +19,10 @@ export const ChevronIcon = (p: P) => <Icon {...p}><path d="M6 9l6 6 6-6" /></Ico
 export const ArrowIcon = ({ className = '', ...p }: P) => (
   <Icon className={`rtl:-scale-x-100 ${className}`} {...p}><path d="M5 12h14M13 6l6 6-6 6" /></Icon>
 );
+export const SunIcon = (p: P) => (
+  <Icon {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4" /></Icon>
+);
+export const MoonIcon = (p: P) => <Icon {...p}><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" /></Icon>;
 export const PhoneIcon = (p: P) => (
   <Icon {...p}><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></Icon>
 );

@@ -19,6 +19,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script>
+      // Theme before first paint: saved choice, else the system setting (no white flash in dark mode).
+      try {
+        var theme = localStorage.getItem('hm-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+        if (theme === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0c1724');
+      } catch (e) {}
       // Apply the saved language before first paint (no LTR flash for Arabic visitors).
       try {
         if (localStorage.getItem('hm-lang') === 'ar') {

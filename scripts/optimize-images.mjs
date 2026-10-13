@@ -110,5 +110,16 @@ async function logo() {
     .jpeg({ quality: 85 }).toFile(out('og-image.jpg'));
 }
 
+// Hero photo of the shop: keep its proportions, three widths for phones up to high-DPI desktops.
+async function storefront() {
+  const src = path.join(ROOT, 'assets/Storefront/Historia Medic boutique.jpg');
+  for (const w of [480, 800, 1200]) {
+    await sharp(src).rotate().resize({ width: w }).webp({ quality: 68, effort: 6 }).toFile(path.join(OUT, `storefront-${w}.webp`));
+  }
+  const { width, height } = await sharp(path.join(OUT, 'storefront-1200.webp')).metadata();
+  console.log(`storefront: ${width}x${height} (ratio ${(width / height).toFixed(3)})`);
+}
+
 await products();
 await logo();
+await storefront();

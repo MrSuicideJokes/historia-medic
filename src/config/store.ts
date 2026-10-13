@@ -10,7 +10,7 @@ export const store = {
   tiktok: 'HistoriaMedic',
   coords: [36.258018304462325, 6.5878510958306915] as [number, number],
   // Public URL of the deployed site, no trailing slash. Needed for absolute og:image / og:url.
-  siteUrl: '',
+  siteUrl: 'https://historia-medic.vercel.app',
 };
 
 export const links = {

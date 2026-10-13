@@ -48,6 +48,3 @@ export const productById = new Map(products.map((p) => [p.id, p]));
 
 export const imageSrc = (name: string, w: 480 | 960 = 480) => `/images/${name}-${w}.webp`;
 export const imageSrcSet = (name: string) => `${imageSrc(name, 480)} 480w, ${imageSrc(name, 960)} 960w`;
-
-// Photos composed in the home page hero: the first is shown large.
-export const heroProductIds = ['omron-m3-comfort-afib', 'beurer-gs203-new-york', 'coussin-vario'];

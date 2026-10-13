@@ -6,6 +6,7 @@ export const fr = {
   skip: 'Aller au contenu',
   nav: { home: 'Accueil', products: 'Produits', contact: 'Contact', cart: 'Panier', menu: 'Navigation principale' },
   langLabel: 'Langue',
+  darkMode: 'Mode sombre',
   cartLink: (n: number) => (n ? `Panier, ${plural(n, 'article', 'articles')}` : 'Panier, vide'),
 
   categories: { 'pese-personne': 'Pèse-personne', tensiometres: 'Tensiomètres', autres: 'Autres' } as Record<Category, string>,
@@ -16,6 +17,8 @@ export const fr = {
     eyebrow: 'Matériel médical · Constantine',
     lead: 'Matériel médical de qualité à Constantine. Choisissez en ligne, commandez sur WhatsApp.',
     cta: 'Voir les produits',
+    storefront: 'Notre boutique à Constantine',
+    storefrontAlt: 'Façade illuminée de la boutique Historia Medic à Constantine, le soir',
     categoriesTitle: 'Le catalogue',
     featuredTitle: 'Une sélection',
     seeAll: 'Tout le catalogue',
@@ -95,6 +98,12 @@ export const fr = {
     directions: 'Itinéraire',
     mapLabel: 'Carte de l’emplacement de Historia Medic',
     mapHint: 'Déplacez la carte avec deux doigts.',
+  },
+
+  dock: {
+    label: 'Votre panier',
+    view: 'Voir le panier',
+    added: 'Ajouté au panier',
   },
 
   footer: { follow: 'Suivez-nous', contact: 'Contact' },
