@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Historia Medic · Matériel médical à Constantine</title>
+    <meta name="description" content="Pèse-personnes, tensiomètres et matériel médical de qualité à Constantine. Choisissez en ligne, commandez sur WhatsApp." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Historia Medic" />
+    <meta property="og:locale" content="fr_DZ" />
+    <meta property="og:locale:alternate" content="ar_DZ" />
+    <meta property="og:title" content="Historia Medic · Matériel médical à Constantine" />
+    <meta property="og:description" content="Pèse-personnes, tensiomètres et matériel médical de qualité à Constantine. Choisissez en ligne, commandez sur WhatsApp." />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      // Apply the saved language before first paint (no LTR flash for Arabic visitors).
+      try {
+        if (localStorage.getItem('hm-lang') === 'ar') {
+          document.documentElement.lang = 'ar';
+          document.documentElement.dir = 'rtl';
+          // The prerendered page is French: keep it hidden until the Arabic render replaces it.
+          document.documentElement.classList.add('await-render');
+        }
+      } catch (e) {}
+    </script>
+    <style>.await-render #root:not([data-ready]) { visibility: hidden; }</style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

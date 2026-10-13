@@ -1,0 +1,232 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/readex-pro/full.css';
+
+/* Mouse/trackpad devices (hover effects that would stick on touch). */
+@custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
+
+/* Design tokens. Colors sampled from the logo (blue #176198, red #E62E2A, cream #F2EEE6). */
+@theme {
+  --color-*: initial;
+  --color-ink: #0e2338;          /* text: 15.9:1 on paper */
+  --color-muted: #4c5e70;        /* secondary text: 6.7:1 on paper */
+  --color-blue: #176198;         /* primary: 6.6:1 on paper */
+  --color-blue-strong: #104a75;  /* hover / pressed */
+  --color-blue-tint: #eef4f9;    /* cool surface */
+  --color-red: #e62e2a;          /* logo red: decoration only (4.4:1, not for small text) */
+  --color-red-text: #c0221e;     /* prices, badge: 6.0:1 on paper */
+  --color-paper: #ffffff;
+  --color-cream: #f2eee6;        /* logo disc background */
+  --color-line: #d3dce5;         /* hairline rules (decorative) */
+  --color-line-strong: #76879a;  /* form control borders: 3.7:1 on paper */
+  --color-current: currentColor;
+  --color-transparent: transparent;
+
+  --font-sans: 'Readex Pro Variable', 'Segoe UI', Tahoma, sans-serif;
+
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-md: 6px;
+
+  --animate-bump: bump 320ms ease-out;
+  @keyframes bump {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-variation-settings: 'HEXP' 0;
+    line-height: 1.55;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :lang(ar) body { line-height: 1.75; }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  img { max-width: 100%; }
+}
+
+@utility display {
+  /* Readex Pro's hyper-expansion axis: wide, confident headlines. */
+  font-variation-settings: 'HEXP' 45;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  /* Arabic letterforms are already broad: only a touch of expansion. */
+  &:lang(ar) { font-variation-settings: 'HEXP' 10; line-height: 1.25; }
+}
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+}
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  &:lang(ar) { letter-spacing: 0; font-size: 0.875rem; }
+}
+@utility wrap {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 48rem) { padding-inline: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Map marker: logo disc on a short stem (see components/MapView.tsx). */
+/* Doubled class: leaflet.css (loaded later) sets .leaflet-marker-icon { display: block }. */
+.leaflet-marker-icon.hm-marker { display: flex; flex-direction: column; align-items: center; }
+.hm-marker__disc {
+  display: block; width: 52px; height: 52px; padding: 4px; border-radius: 9999px;
+  background: var(--color-paper); border: 1.5px solid var(--color-blue);
+}
+.hm-marker__disc img { display: block; width: 100%; height: 100%; border-radius: 9999px; }
+.hm-marker__stem { display: block; width: 2px; height: 14px; background: var(--color-blue); }
+
+/* Leaflet controls in the site's language: flat, 1px, no shadows. */
+.leaflet-container { font-family: var(--font-sans); }
+/* OSM tiles in grayscale: a quiet clinical base under the blue marker. */
+.leaflet-tile-pane { filter: grayscale(1) contrast(0.92) brightness(1.04); }
+.leaflet-bar { border: 1px solid var(--color-line-strong) !important; box-shadow: none !important; border-radius: var(--radius) !important; }
+.leaflet-bar a { width: 44px !important; height: 44px !important; line-height: 44px !important; color: var(--color-ink) !important; }
+.leaflet-control-attribution { font-size: 11px; }
+
+/* Text inputs and selects. 16px text stops iOS from zooming on focus. */
+@utility field {
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  background-color: var(--color-paper);
+  font-size: 1rem;
+  color: var(--color-ink);
+  transition: border-color 150ms;
+  &::placeholder { color: var(--color-muted); opacity: 1; }
+  &:hover:not(:disabled) { border-color: var(--color-ink); }
+  &:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 0; border-color: var(--color-blue); }
+  &[aria-invalid='true'] { border-color: var(--color-red-text); }
+  &:disabled { background-color: var(--color-blue-tint); color: var(--color-muted); border-color: var(--color-line); cursor: not-allowed; }
+}
+
+/* System Arabic face, for the lone "العربية" label on French pages (see Header). */
+@utility font-system-ar {
+  font-family: Tahoma, 'Segoe UI', 'Noto Sans Arabic', sans-serif;
+}
+
+/* ── Lively layer ───────────────────────────────────────────────────────────
+   Brand gradients only (logo blue → cream, a touch of logo red). Every text
+   colour on them keeps AA; all motion stops under prefers-reduced-motion. */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Hero: cool morning light on the photo side, a faint warm glow below it. */
+@utility bg-hero {
+  background:
+    radial-gradient(55% 75% at 78% 42%, color-mix(in oklab, var(--color-blue) 18%, transparent), transparent 70%),
+    radial-gradient(30% 40% at 92% 72%, color-mix(in oklab, var(--color-red) 12%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--color-blue-tint) 0%, color-mix(in oklab, var(--color-cream) 45%, var(--color-paper)) 70%, var(--color-paper) 100%);
+  [dir='rtl'] & {
+    background:
+      radial-gradient(55% 75% at 22% 42%, color-mix(in oklab, var(--color-blue) 18%, transparent), transparent 70%),
+      radial-gradient(30% 40% at 8% 72%, color-mix(in oklab, var(--color-red) 12%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--color-blue-tint) 0%, color-mix(in oklab, var(--color-cream) 45%, var(--color-paper)) 70%, var(--color-paper) 100%);
+  }
+}
+
+/* Page headers and the featured band. */
+@utility bg-band {
+  background:
+    radial-gradient(50% 120% at 100% 0%, color-mix(in oklab, var(--color-blue) 12%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--color-blue-tint), color-mix(in oklab, var(--color-cream) 50%, var(--color-paper)));
+}
+
+/* Photo tiles: white studio shots are multiplied onto a soft cool-to-white wash. */
+@utility bg-tile {
+  background: linear-gradient(155deg, var(--color-paper) 35%, color-mix(in oklab, var(--color-blue-tint) 85%, var(--color-cream)) 100%);
+}
+
+@utility bg-footer {
+  background:
+    radial-gradient(70% 110% at 100% 0%, color-mix(in oklab, var(--color-blue) 55%, transparent), transparent 65%),
+    linear-gradient(165deg, var(--color-ink) 30%, #0a1828);
+}
+
+/* Logo stripe: blue into red, as in the monogram. */
+@utility bg-brand-stripe {
+  background: linear-gradient(90deg, var(--color-blue) 0%, var(--color-blue) 45%, var(--color-red) 100%);
+  [dir='rtl'] & { background: linear-gradient(270deg, var(--color-blue) 0%, var(--color-blue) 45%, var(--color-red) 100%); }
+}
+
+/* Buttons (white text ≥ 4.9:1 on every stop). */
+@utility btn-primary {
+  color: var(--color-paper);
+  background-image: linear-gradient(135deg, #1f74b4 0%, var(--color-blue) 55%, var(--color-blue-strong) 100%);
+  box-shadow: 0 8px 18px -10px color-mix(in oklab, var(--color-blue) 80%, transparent);
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  &:hover { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--color-blue) 90%, transparent); }
+  &:active { transform: translateY(0) scale(0.98); }
+}
+@utility btn-whatsapp {
+  color: var(--color-paper);
+  background-image: linear-gradient(135deg, #d02a24 0%, var(--color-red-text) 55%, #a51c18 100%);
+  box-shadow: 0 10px 22px -12px color-mix(in oklab, var(--color-red) 85%, transparent);
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  &:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  &:active { transform: translateY(0) scale(0.98); }
+}
+
+/* Soft, tinted depth for floating elements (hero photos, lifted cards). */
+@utility shadow-float {
+  box-shadow: 0 1px 2px rgb(14 35 56 / 0.06), 0 22px 44px -22px rgb(14 35 56 / 0.35);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(28px); }
+  to { transform: none; }
+}
+
+/* Slide up as it scrolls into view (movement only: text never dips below AA contrast). CSS scroll-driven animation: no JS; elements already
+   on screen at load are at their end state, so nothing above the fold starts hidden. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: slide-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+/* Hero photos settle in once on load. */
+@utility rise-in {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
