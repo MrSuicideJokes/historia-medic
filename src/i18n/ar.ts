@@ -4,14 +4,12 @@ import type { Dict } from './fr';
 const plural = (n: number, [one, two, few, many]: [string, string, string, string]) =>
   n === 1 ? one : n === 2 ? two : n <= 10 ? `${n} ${few}` : `${n} ${many}`;
 const products = (n: number) => plural(n, ['منتج واحد', 'منتجان', 'منتجات', 'منتجًا']);
-const items = (n: number) => plural(n, ['قطعة واحدة', 'قطعتان', 'قطع', 'قطعة']);
 
 export const ar: Dict = {
   skip: 'الانتقال إلى المحتوى',
-  nav: { home: 'الرئيسية', products: 'المنتجات', contact: 'اتصل بنا', cart: 'السلة', menu: 'القائمة الرئيسية' },
+  nav: { home: 'الرئيسية', products: 'المنتجات', contact: 'اتصل بنا', menu: 'القائمة الرئيسية' },
   langLabel: 'اللغة',
   darkMode: 'الوضع الداكن',
-  cartLink: (n) => (n ? `السلة، ${items(n)}` : 'السلة، فارغة'),
 
   categories: { 'pese-personne': 'موازين الأشخاص', tensiometres: 'أجهزة قياس الضغط', autres: 'منتجات أخرى' },
   all: 'الكل',
@@ -31,9 +29,8 @@ export const ar: Dict = {
   },
 
   product: {
-    add: 'أضف إلى السلة',
-    added: 'تمت الإضافة',
-    addedSr: 'أُضيف إلى السلة',
+    order: 'اطلب الآن',
+    orderItem: (name) => `اطلب ${name}`,
     qty: 'الكمية',
     decrease: 'إنقاص الكمية',
     increase: 'زيادة الكمية',
@@ -44,25 +41,6 @@ export const ar: Dict = {
   products: {
     title: 'منتجاتنا',
     filterLabel: 'تصفية حسب الفئة',
-  },
-
-  cart: {
-    title: 'السلة',
-    items,
-    empty: 'سلّتكم فارغة.',
-    emptyText: 'تصفّحوا المنتجات وأضيفوا ما تحتاجون إليه.',
-    emptyCta: 'تصفّح المنتجات',
-    unitPrice: 'سعر الوحدة',
-    remove: 'حذف',
-    removeItem: (name) => `حذف ${name} من السلة`,
-    lineTotal: 'المجموع',
-    total: 'مجموع الطلب',
-    clear: 'إفراغ السلة',
-    clearConfirm: 'هل تريدون إفراغ السلة بالكامل؟',
-    clearYes: 'نعم، أفرغها',
-    cancel: 'إلغاء',
-    checkout: 'إتمام الطلب',
-    continue: 'متابعة التسوّق',
   },
 
   checkout: {
@@ -86,11 +64,15 @@ export const ar: Dict = {
       commune: 'اختاروا البلدية.',
     },
     errorSummary: 'بعض الحقول تحتاج إلى تصحيح.',
-    summary: 'ملخّص الطلب',
-    edit: 'تعديل السلة',
+    summary: 'طلبكم',
+    change: 'تغيير المنتج',
+    unitPrice: 'سعر الوحدة',
+    total: 'المجموع',
     submit: 'اطلب عبر واتساب',
-    note: 'تبقى سلّتكم محفوظة إلى أن تُفرغوها.',
-    empty: 'سلّتكم فارغة، لا يوجد ما يمكن طلبه.',
+    note: 'لا يُرسَل أي شيء قبل أن تضغطوا على «إرسال» في واتساب.',
+    empty: 'لم تختاروا أي منتج.',
+    emptyText: 'اختاروا منتجًا من الكتالوج، ثم اضغطوا على «اطلب الآن».',
+    emptyCta: 'تصفّح المنتجات',
   },
 
   contact: {
@@ -104,12 +86,6 @@ export const ar: Dict = {
     mapHint: 'حرّكوا الخريطة بإصبعين.',
   },
 
-  dock: {
-    label: 'سلّتكم',
-    view: 'عرض السلة',
-    added: 'أُضيف إلى السلة',
-  },
-
   footer: { follow: 'تابعونا', contact: 'اتصل بنا' },
 
   notFound: {
@@ -121,7 +97,6 @@ export const ar: Dict = {
   meta: {
     home: { title: 'Historia Medic · معدات طبية في قسنطينة', description: 'موازين، أجهزة قياس الضغط ومعدات طبية ذات جودة في قسنطينة. اختاروا عبر الموقع واطلبوا عبر واتساب.' },
     products: { title: 'المنتجات · Historia Medic', description: 'موازين، أجهزة قياس الضغط ومعدات طبية أخرى، بالأسعار بالدينار.' },
-    cart: { title: 'السلة · Historia Medic', description: 'سلّتكم في Historia Medic.' },
     checkout: { title: 'الطلب · Historia Medic', description: 'أكملوا طلبكم وأرسلوه عبر واتساب.' },
     contact: { title: 'اتصل بنا · Historia Medic', description: 'Historia Medic في قسنطينة: الهاتف، واتساب، إنستغرام، تيك توك والاتجاهات.' },
     notFound: { title: 'الصفحة غير موجودة · Historia Medic', description: 'هذه الصفحة غير موجودة.' },

@@ -1,7 +1,7 @@
 import { links, store } from '../config/store';
 import { useLang } from '../state/lang';
 import { InstagramIcon, PhoneIcon, PinIcon, TikTokIcon, WhatsAppIcon } from './icons';
-import { LogoDisc, Wordmark } from './Logo';
+import { Wordmark } from './Logo';
 
 const rowLink = 'inline-flex min-h-11 items-center gap-3 text-white/90 transition-colors hover:text-white';
 
@@ -12,10 +12,7 @@ export function Footer() {
       <span aria-hidden="true" className="block h-1 bg-brand-stripe" />
       <div className="wrap relative grid gap-10 py-14 md:grid-cols-12">
         <div className="md:col-span-5">
-          <div className="flex items-center gap-3">
-            <LogoDisc size={56} />
-            <Wordmark className="text-xl" />
-          </div>
+          <Wordmark discSize={48} className="text-xl" />
           <p className="mt-4 max-w-xs text-lg font-light text-white/90">{store.tagline[lang]}</p>
         </div>
 

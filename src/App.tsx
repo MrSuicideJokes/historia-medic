@@ -1,12 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router';
+import { Navigate, Route, Routes, useLocation } from 'react-router';
 import { useLang } from './state/lang';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { CartDock } from './components/CartDock';
 import Home from './pages/Home';
 import Products from './pages/Products';
-import Cart from './pages/Cart';
 import NotFound from './pages/NotFound';
 import Contact from './pages/Contact';
 
@@ -37,14 +35,14 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
+          {/* The cart was removed (one product per order): old links land on the catalogue. */}
+          <Route path="/cart" element={<Navigate to="/products" replace />} />
           <Route path="/checkout" element={<Suspense fallback={pending}><Checkout /></Suspense>} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
-      <CartDock />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { MAX_QTY } from '../state/cart';
+import { MAX_QTY } from '../lib/order';
 import { useLang } from '../state/lang';
 import { MinusIcon, PlusIcon } from './icons';
 

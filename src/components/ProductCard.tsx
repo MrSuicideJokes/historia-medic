@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import { Link } from 'react-router';
 import type { Product } from '../data/products';
 import { formatPrice } from '../lib/format';
-import { useCart } from '../state/cart';
+import { orderPath } from '../lib/order';
 import { useLang } from '../state/lang';
-import { CheckIcon } from './icons';
+import { ArrowIcon } from './icons';
 import { ProductImage } from './ProductImage';
 import { Stepper } from './Stepper';
 
@@ -53,21 +54,10 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
 }
 
 // eager: the card is above the fold, so its main photo must not wait for lazy-loading.
+// One product per order: the button goes straight to checkout with the chosen quantity.
 export function ProductCard({ product, eager = false, heading: H = 'h3' }: { product: Product; eager?: boolean; heading?: 'h2' | 'h3' }) {
   const { t, lang } = useLang();
-  const { add } = useCart();
   const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
-  const timer = useRef(0);
-  useEffect(() => () => clearTimeout(timer.current), []);
-
-  const onAdd = () => {
-    add(product.id, qty);
-    setQty(1);
-    setAdded(true);
-    clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setAdded(false), 1600);
-  };
 
   return (
     <article className="group relative flex flex-col bg-paper transition-[transform,box-shadow] duration-300 ease-out hover:z-10 hover:-translate-y-1 hover:shadow-float">
@@ -76,14 +66,11 @@ export function ProductCard({ product, eager = false, heading: H = 'h3' }: { pro
         <H dir="ltr" className="line-clamp-3 text-[0.95rem] leading-snug rtl:text-right" title={product.name}>{product.name}</H>
         <p className="tnum mt-auto text-lg font-semibold text-red-text">{formatPrice(product.price, lang)}</p>
         <Stepper value={qty} onChange={setQty} />
-        <button type="button" onClick={onAdd}
-          className={`flex min-h-11 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-medium ${
-            added ? 'bg-ink text-paper' : 'btn-primary'
-          }`}>
-          {added && <CheckIcon className="shrink-0" />}
-          {added ? t.product.added : t.product.add}
-        </button>
-        <span className="sr-only" aria-live="polite">{added ? t.product.addedSr : ''}</span>
+        <Link to={orderPath(product.id, qty)} aria-label={t.product.orderItem(product.name)}
+          className="btn-primary flex min-h-11 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-medium">
+          {t.product.order}
+          <ArrowIcon width={18} height={18} />
+        </Link>
       </div>
     </article>
   );

@@ -4,10 +4,9 @@ const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : 
 
 export const fr = {
   skip: 'Aller au contenu',
-  nav: { home: 'Accueil', products: 'Produits', contact: 'Contact', cart: 'Panier', menu: 'Navigation principale' },
+  nav: { home: 'Accueil', products: 'Produits', contact: 'Contact', menu: 'Navigation principale' },
   langLabel: 'Langue',
   darkMode: 'Mode sombre',
-  cartLink: (n: number) => (n ? `Panier, ${plural(n, 'article', 'articles')}` : 'Panier, vide'),
 
   categories: { 'pese-personne': 'Pèse-personne', tensiometres: 'Tensiomètres', autres: 'Autres' } as Record<Category, string>,
   all: 'Tous',
@@ -27,9 +26,8 @@ export const fr = {
   },
 
   product: {
-    add: 'Ajouter au panier',
-    added: 'Ajouté',
-    addedSr: 'Ajouté au panier',
+    order: 'Commander',
+    orderItem: (name: string) => `Commander ${name}`,
     qty: 'Quantité',
     decrease: 'Diminuer la quantité',
     increase: 'Augmenter la quantité',
@@ -40,25 +38,6 @@ export const fr = {
   products: {
     title: 'Nos produits',
     filterLabel: 'Filtrer par catégorie',
-  },
-
-  cart: {
-    title: 'Panier',
-    items: (n: number) => plural(n, 'article', 'articles'),
-    empty: 'Votre panier est vide.',
-    emptyText: 'Parcourez le catalogue et ajoutez les produits qui vous intéressent.',
-    emptyCta: 'Voir les produits',
-    unitPrice: 'Prix unitaire',
-    remove: 'Retirer',
-    removeItem: (name: string) => `Retirer ${name} du panier`,
-    lineTotal: 'Total',
-    total: 'Total de la commande',
-    clear: 'Vider le panier',
-    clearConfirm: 'Vider tout le panier ?',
-    clearYes: 'Oui, vider',
-    cancel: 'Annuler',
-    checkout: 'Passer la commande',
-    continue: 'Continuer mes achats',
   },
 
   checkout: {
@@ -82,11 +61,15 @@ export const fr = {
       commune: 'Choisissez une commune.',
     },
     errorSummary: 'Certains champs sont à corriger.',
-    summary: 'Récapitulatif',
-    edit: 'Modifier le panier',
+    summary: 'Votre commande',
+    change: 'Changer de produit',
+    unitPrice: 'Prix unitaire',
+    total: 'Total',
     submit: 'Commander sur WhatsApp',
-    note: 'Votre panier reste enregistré jusqu’à ce que vous le vidiez.',
-    empty: 'Votre panier est vide, il n’y a rien à commander.',
+    note: 'Rien n’est envoyé tant que vous n’appuyez pas sur Envoyer dans WhatsApp.',
+    empty: 'Aucun produit choisi.',
+    emptyText: 'Choisissez un produit dans le catalogue, puis appuyez sur « Commander ».',
+    emptyCta: 'Voir les produits',
   },
 
   contact: {
@@ -100,12 +83,6 @@ export const fr = {
     mapHint: 'Déplacez la carte avec deux doigts.',
   },
 
-  dock: {
-    label: 'Votre panier',
-    view: 'Voir le panier',
-    added: 'Ajouté au panier',
-  },
-
   footer: { follow: 'Suivez-nous', contact: 'Contact' },
 
   notFound: {
@@ -117,7 +94,6 @@ export const fr = {
   meta: {
     home: { title: 'Historia Medic · Matériel médical à Constantine', description: 'Pèse-personnes, tensiomètres et matériel médical de qualité à Constantine. Choisissez en ligne, commandez sur WhatsApp.' },
     products: { title: 'Produits · Historia Medic', description: 'Pèse-personnes, tensiomètres et autre matériel médical, avec les prix en dinars.' },
-    cart: { title: 'Panier · Historia Medic', description: 'Votre panier Historia Medic.' },
     checkout: { title: 'Commande · Historia Medic', description: 'Finalisez votre commande et envoyez-la sur WhatsApp.' },
     contact: { title: 'Contact · Historia Medic', description: 'Historia Medic à Constantine : téléphone, WhatsApp, Instagram, TikTok et itinéraire.' },
     notFound: { title: 'Page introuvable · Historia Medic', description: 'Cette page n’existe pas.' },

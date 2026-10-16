@@ -4,7 +4,6 @@ import { StrictMode } from 'react';
 import { prerender } from 'react-dom/static';
 import { StaticRouter } from 'react-router';
 import { LangProvider } from './state/lang';
-import { CartProvider } from './state/cart';
 import App from './App';
 
 export async function render(url: string): Promise<string> {
@@ -12,9 +11,7 @@ export async function render(url: string): Promise<string> {
     <StrictMode>
       <StaticRouter location={url}>
         <LangProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
+          <App />
         </LangProvider>
       </StaticRouter>
     </StrictMode>,

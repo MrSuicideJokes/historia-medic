@@ -1,17 +1,17 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import algeria from '../data/algeria.json';
 import type { Dict } from '../i18n/fr';
 import { formatPrice } from '../lib/format';
 import { usePageMeta } from '../lib/meta';
 import { formatPhone, normalizePhone } from '../lib/phone';
+import { readOrder } from '../lib/order';
 import { buildMessage, whatsappUrl } from '../lib/whatsapp';
-import { useCart } from '../state/cart';
 import { useLang } from '../state/lang';
-import { ChevronIcon, WhatsAppIcon } from '../components/icons';
+import { ArrowIcon, ChevronIcon, WhatsAppIcon } from '../components/icons';
 import { ProductImage } from '../components/ProductImage';
 import { WilayaCombobox, type Wilaya } from '../components/WilayaCombobox';
-import { EmptyCart } from './Cart';
+import { Stepper } from '../components/Stepper';
 import { PageHeader } from '../components/PageHeader';
 
 type Field = 'firstName' | 'lastName' | 'phone' | 'wilaya' | 'commune';
@@ -47,6 +47,21 @@ function validate(v: Values): Errors {
   return e;
 }
 
+// Reached without a (valid) product: send them to the catalogue.
+function NoProduct() {
+  const { t } = useLang();
+  return (
+    <div className="border-b border-line py-14">
+      <p className="display text-2xl font-medium md:text-3xl">{t.checkout.empty}</p>
+      <p className="mt-3 text-muted">{t.checkout.emptyText}</p>
+      <Link to="/products" className="btn-primary mt-8 inline-flex min-h-12 items-center gap-3 rounded-md px-6 font-medium">
+        {t.checkout.emptyCta}
+        <ArrowIcon />
+      </Link>
+    </div>
+  );
+}
+
 function FieldRow({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string; children: ReactNode }) {
   return (
     <div>
@@ -61,7 +76,9 @@ function FieldRow({ id, label, hint, error, children }: { id: string; label: str
 export default function Checkout() {
   usePageMeta('checkout');
   const { t, lang } = useLang();
-  const { lines, total } = useCart();
+  const [params, setParams] = useSearchParams();
+  const order = readOrder(params);
+  const setQty = (q: number) => order && setParams({ p: order.product.id, q: String(q) }, { replace: true });
   const [v, setV] = useState(load);
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -97,9 +114,8 @@ export default function Checkout() {
         wilaya: `${wilaya!.code} - ${wilaya!.fr}`,
         commune: v.commune,
       },
-      lines.map((l) => ({ name: l.product.name, qty: l.qty, price: l.product.price })),
+      { name: order!.product.name, qty: order!.qty, price: order!.product.price },
     );
-    // The cart is deliberately kept: the customer may not send the message.
     window.location.href = whatsappUrl(message);
   };
 
@@ -108,8 +124,8 @@ export default function Checkout() {
       <PageHeader title={t.checkout.title} />
       <div className="wrap">
 
-      {lines.length === 0 ? (
-        <EmptyCart message={t.checkout.empty} />
+      {!order ? (
+        <NoProduct />
       ) : (
         <form noValidate onSubmit={onSubmit}
           className="mt-8 grid gap-x-12 gap-y-8 [grid-template-areas:'f'_'s'_'b'] md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:[grid-template-areas:'f_s'_'b_s']">
@@ -157,23 +173,23 @@ export default function Checkout() {
           <aside aria-labelledby="summary-title" className="rounded-md border border-line bg-band p-5 shadow-float [grid-area:s] md:sticky md:top-24 md:self-start">
             <div className="flex items-baseline justify-between gap-4">
               <h2 id="summary-title" className="font-medium">{t.checkout.summary}</h2>
-              <Link to="/cart" className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:text-blue-strong">{t.checkout.edit}</Link>
+              <Link to="/products" className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:text-blue-strong">{t.checkout.change}</Link>
             </div>
-            <ul className="mt-2">
-              {lines.map(({ id, qty, product }) => (
-                <li key={id} className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-t border-line py-3">
-                  <span className="border border-line"><ProductImage name={product.images[0]} alt="" sizes="48px" /></span>
-                  <span className="text-sm leading-snug">
-                    <span dir="ltr" className="line-clamp-2 rtl:text-right">{product.name}</span>
-                    <span className="tnum text-muted">× {qty}</span>
-                  </span>
-                  <span className="tnum text-sm font-medium">{formatPrice(qty * product.price, lang)}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="flex items-baseline justify-between gap-4 border-t-2 border-ink pt-3">
-              <span className="font-medium">{t.cart.total}</span>
-              <span className="tnum text-2xl font-semibold text-red-text">{formatPrice(total, lang)}</span>
+            <div className="mt-2 grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-4 border-t border-line pt-4">
+              <span className="overflow-hidden rounded-md bg-tile">
+                <ProductImage name={order.product.images[0]} alt="" sizes="80px" className="mix-blend-multiply" />
+              </span>
+              <span>
+                <span dir="ltr" className="line-clamp-3 font-medium leading-snug rtl:text-right">{order.product.name}</span>
+                <span className="mt-1 block text-sm text-muted">
+                  {t.checkout.unitPrice} <span className="tnum">{formatPrice(order.product.price, lang)}</span>
+                </span>
+              </span>
+            </div>
+            <Stepper value={order.qty} onChange={setQty} className="mt-4 w-full" />
+            <div className="mt-4 flex items-baseline justify-between gap-4 border-t-2 border-ink pt-3">
+              <span className="font-medium">{t.checkout.total}</span>
+              <span className="tnum text-2xl font-semibold text-red-text">{formatPrice(order.qty * order.product.price, lang)}</span>
             </div>
           </aside>
 

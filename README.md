@@ -1,13 +1,13 @@
 # Historia Medic — boutique en ligne
 
-Vite + React + TypeScript storefront. No backend: the cart lives in the browser, and orders are sent on WhatsApp.
+Vite + React + TypeScript storefront. No backend: each order is one product (any quantity), sent on WhatsApp from the checkout page.
 
 ## Run and build
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173 (dev server)
-npm test           # logic checks: phone numbers, WhatsApp message, cart, prices, location data
+npm test           # logic checks: phone numbers, WhatsApp message, order links, prices, location data
 npm run build      # production build in dist/
 npm run preview    # serve dist/ locally
 ```
@@ -43,11 +43,11 @@ No component changes are needed. Originals in `assets/` are never modified.
 
 ## Change a price
 
-Edit `price` (in DZD) for that product in `src/data/products.ts`. Carts already saved in visitors' browsers pick up the new price automatically.
+Edit `price` (in DZD) for that product in `src/data/products.ts`.
 
 ## Remove a product
 
-Delete its entry in `src/data/products.ts`. Visitors who had it in their cart will see it dropped on their next visit.
+Delete its entry in `src/data/products.ts`. Old checkout links to it show "Aucun produit choisi" with a link back to the catalogue.
 
 ## Location data (wilayas / communes)
 

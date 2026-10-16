@@ -15,7 +15,6 @@ const { render } = await import(pathToFileURL(path.join(ROOT, 'dist-ssr/entry-se
 const routes = {
   '/': ['home', 'index.html'],
   '/products': ['products', 'products/index.html'],
-  '/cart': ['cart', 'cart/index.html'],
   '/checkout': ['checkout', 'checkout/index.html'],
   '/contact': ['contact', 'contact/index.html'],
   '/404': ['notFound', '404.html'],

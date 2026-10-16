@@ -1,9 +1,8 @@
 import { Link, NavLink } from 'react-router';
 import { useLang, type Lang } from '../state/lang';
-import { useCart, useHydrated } from '../state/cart';
 import { useTheme } from '../state/theme';
-import { BagIcon, MoonIcon, SunIcon } from './icons';
-import { LogoDisc, Wordmark } from './Logo';
+import { MoonIcon, SunIcon } from './icons';
+import { Wordmark } from './Logo';
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   `relative inline-flex min-h-11 items-center px-1 text-[0.95rem] transition-colors hover:text-blue ${
@@ -46,35 +45,14 @@ function ThemeToggle() {
   );
 }
 
-function CartLink() {
-  const cart = useCart();
-  const count = useHydrated() ? cart.count : 0;
-  const { t } = useLang();
-  return (
-    <Link to="/cart" aria-label={t.cartLink(count)}
-      className="relative inline-flex size-11 items-center justify-center gap-2 rounded-md text-ink transition-colors hover:bg-blue-tint md:w-auto md:border md:border-line-strong md:px-3 md:hover:border-blue">
-      <BagIcon width={24} height={24} />
-      <span aria-hidden="true" className="hidden text-sm font-medium md:inline">{t.nav.cart}</span>
-      {count > 0 && (
-        // Re-keyed on count so the bump replays on every change.
-        <span key={count} aria-hidden="true"
-          className="tnum absolute end-0.5 top-0.5 grid h-5 min-w-5 md:-end-2 md:-top-2 animate-bump place-items-center rounded-full bg-alert px-1 text-[0.7rem] font-semibold text-white">
-          {count}
-        </span>
-      )}
-    </Link>
-  );
-}
-
 export function Header() {
   const { t } = useLang();
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper">
       <span aria-hidden="true" className="block h-[3px] bg-brand-stripe" />
       <div className="wrap flex h-16 items-center gap-6">
-        <Link to="/" className="flex min-h-11 items-center gap-2.5 rounded" aria-label={`${t.nav.home} · Historia Medic`}>
-          <LogoDisc size={40} />
-          <Wordmark className="text-[1.05rem] text-ink" />
+        <Link to="/" className="flex min-h-11 items-center rounded-md">
+          <Wordmark plate discSize={30} className="text-[0.95rem] md:text-base" />
         </Link>
         <nav aria-label={t.nav.menu} className="ms-auto hidden md:block">
           <ul className="flex items-center gap-5">
@@ -83,8 +61,7 @@ export function Header() {
             <li><NavLink to="/contact" className={navClass}>{t.nav.contact}</NavLink></li>
           </ul>
         </nav>
-        <div className="ms-auto hidden items-center md:ms-0 md:flex"><LangSwitch /><ThemeToggle /></div>
-        <div className="ms-auto md:ms-0"><CartLink /></div>
+        <div className="hidden items-center md:flex"><LangSwitch /><ThemeToggle /></div>
       </div>
       {/* Mobile: nav stays visible as a second row instead of hiding behind a menu button. */}
       <div className="wrap flex items-center justify-between border-t border-line md:hidden">

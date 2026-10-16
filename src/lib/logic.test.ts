@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { formatPrice } from './format';
 import { normalizePhone, formatPhone } from './phone';
 import { buildMessage, whatsappUrl } from './whatsapp';
-import { reducer, sanitize } from '../state/cart';
+import { orderPath, readOrder } from './order';
 import algeria from '../data/algeria.json';
 
 const NB = ' ';
@@ -37,7 +37,7 @@ describe('price', () => {
 describe('whatsapp message', () => {
   const msg = buildMessage(
     { firstName: 'Amina', lastName: 'Benali', phone: '0770 78 64 71', wilaya: '25 - Constantine', commune: 'El Khroub' },
-    [{ name: 'Tensiomètre Microlife BP B3 AFIB', qty: 2, price: 12000 }, { name: 'Flamingo Oreiller Cervical', qty: 1, price: 3200 }],
+    { name: 'Tensiomètre Microlife BP B3 AFIB', qty: 2, price: 12000 },
   );
 
   it('matches the template exactly', () => {
@@ -53,10 +53,11 @@ describe('whatsapp message', () => {
         'Commune : El Khroub',
         '',
         '*Commande*',
-        '1. Tensiomètre Microlife BP B3 AFIB × 2 : 24 000 DA',
-        '2. Flamingo Oreiller Cervical × 1 : 3 200 DA',
+        'Produit : Tensiomètre Microlife BP B3 AFIB',
+        'Quantité : 2',
+        'Prix unitaire : 12 000 DA',
         '',
-        '*Total : 27 200 DA*',
+        '*Total : 24 000 DA*',
       ].join('\n'),
     );
   });
@@ -68,23 +69,27 @@ describe('whatsapp message', () => {
   });
 });
 
-describe('cart', () => {
-  const exists = (id: string) => ['a', 'b'].includes(id);
+describe('order from URL', () => {
+  const read = (q: string) => readOrder(new URLSearchParams(q));
 
-  it('sanitize drops unknown ids and bad quantities, merges and clamps', () => {
-    expect(sanitize([{ id: 'a', qty: 2 }, { id: 'gone', qty: 1 }, { id: 'b', qty: 'x' }, { id: 'b', qty: 0 }, { id: 'a', qty: 150 }, null], exists))
-      .toEqual([{ id: 'a', qty: 99 }]);
-    expect(sanitize('nope', exists)).toEqual([]);
+  it('reads a known product and quantity', () => {
+    const o = read('p=omron-m3-comfort-afib&q=3')!;
+    expect(o.product.id).toBe('omron-m3-comfort-afib');
+    expect(o.qty).toBe(3);
   });
 
-  it('reducer adds, merges, sets (min 1), removes, clears', () => {
-    let s = reducer([], { type: 'add', id: 'a', qty: 2 });
-    s = reducer(s, { type: 'add', id: 'a', qty: 3 });
-    expect(s).toEqual([{ id: 'a', qty: 5 }]);
-    s = reducer(s, { type: 'set', id: 'a', qty: 0 });
-    expect(s).toEqual([{ id: 'a', qty: 1 }]);
-    expect(reducer(s, { type: 'remove', id: 'a' })).toEqual([]);
-    expect(reducer(s, { type: 'clear' })).toEqual([]);
+  it('rejects unknown products and clamps quantities', () => {
+    expect(read('p=nope&q=2')).toBeNull();
+    expect(read('')).toBeNull();
+    expect(read('p=coussin-vario&q=0')!.qty).toBe(1);
+    expect(read('p=coussin-vario&q=500')!.qty).toBe(99);
+    expect(read('p=coussin-vario&q=abc')!.qty).toBe(1);
+    expect(read('p=coussin-vario')!.qty).toBe(1);
+  });
+
+  it('builds the checkout link the card uses', () => {
+    expect(orderPath('coussin-vario', 2)).toBe('/checkout?p=coussin-vario&q=2');
+    expect(read(orderPath('coussin-vario', 2).split('?')[1])!.qty).toBe(2);
   });
 });
 
