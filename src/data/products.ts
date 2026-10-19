@@ -27,7 +27,7 @@ const crocsLuofu = [
   'Poids : 250 g',
   'Antidérapant',
   'Non autoclavable',
-  'Transpirant',
+  'Respirant',
   'Orthopédique',
 ];
 
