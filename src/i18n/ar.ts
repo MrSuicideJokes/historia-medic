@@ -11,7 +11,7 @@ export const ar: Dict = {
   langLabel: 'اللغة',
   darkMode: 'الوضع الداكن',
 
-  categories: { 'pese-personne': 'موازين الأشخاص', tensiometres: 'أجهزة قياس الضغط', autres: 'منتجات أخرى' },
+  categories: { 'pese-personne': 'موازين الأشخاص', tensiometres: 'أجهزة قياس الضغط', crocs: 'كروكس وقباقيب', autres: 'منتجات أخرى' },
   all: 'الكل',
   productCount: products,
 
@@ -30,6 +30,8 @@ export const ar: Dict = {
 
   product: {
     order: 'اطلب الآن',
+    priceTbc: 'السعر يُحدَّد لاحقًا',
+    details: 'المواصفات',
     orderItem: (name) => `اطلب ${name}`,
     qty: 'الكمية',
     decrease: 'إنقاص الكمية',

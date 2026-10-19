@@ -2,7 +2,10 @@ import { store } from '../config/store';
 import { formatPrice } from './format';
 
 export type Customer = { firstName: string; lastName: string; phone: string; wilaya: string; commune: string };
-export type OrderItem = { name: string; qty: number; price: number };
+// price is undefined while the store hasn't set one: the message then asks for confirmation.
+export type OrderItem = { name: string; qty: number; price?: number };
+
+const TBC = 'à confirmer';
 
 // The order message is always in French, whatever the UI language. One product per order.
 export function buildMessage(c: Customer, item: OrderItem): string {
@@ -19,9 +22,9 @@ export function buildMessage(c: Customer, item: OrderItem): string {
     '*Commande*',
     `Produit : ${item.name}`,
     `Quantité : ${item.qty}`,
-    `Prix unitaire : ${formatPrice(item.price, 'fr')}`,
+    `Prix unitaire : ${item.price === undefined ? TBC : formatPrice(item.price, 'fr')}`,
     '',
-    `*Total : ${formatPrice(item.qty * item.price, 'fr')}*`,
+    `*Total : ${item.price === undefined ? TBC : formatPrice(item.qty * item.price, 'fr')}*`,
   ].join('\n');
 }
 

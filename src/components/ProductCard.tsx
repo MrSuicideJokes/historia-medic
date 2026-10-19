@@ -4,7 +4,7 @@ import type { Product } from '../data/products';
 import { formatPrice } from '../lib/format';
 import { orderPath } from '../lib/order';
 import { useLang } from '../state/lang';
-import { ArrowIcon } from './icons';
+import { ArrowIcon, ChevronIcon } from './icons';
 import { ProductImage } from './ProductImage';
 import { Stepper } from './Stepper';
 
@@ -53,6 +53,28 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
   );
 }
 
+// Spec sheet, folded by default so cards stay the same height until someone asks.
+// Native <details>: keyboard and screen-reader support for free. Spec text is French, like product names.
+function Details({ lines }: { lines: string[] }) {
+  const { t } = useLang();
+  return (
+    <details className="group/details text-sm">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-md border border-line px-3 font-medium text-blue transition-colors hover:border-blue [&::-webkit-details-marker]:hidden">
+        {t.product.details}
+        <ChevronIcon width={18} height={18} className="shrink-0 transition-transform group-open/details:rotate-180" />
+      </summary>
+      <ul lang="fr" dir="ltr" className="mt-2 space-y-1 ps-1 text-start text-muted">
+        {lines.map((line) => (
+          <li key={line} className="flex items-baseline gap-2">
+            <span aria-hidden="true" className="size-1 shrink-0 translate-y-[-0.2em] rounded-full bg-red" />
+            {line}
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
 // eager: the card is above the fold, so its main photo must not wait for lazy-loading.
 // One product per order: the button goes straight to checkout with the chosen quantity.
 export function ProductCard({ product, eager = false, heading: H = 'h3' }: { product: Product; eager?: boolean; heading?: 'h2' | 'h3' }) {
@@ -64,7 +86,12 @@ export function ProductCard({ product, eager = false, heading: H = 'h3' }: { pro
       <Gallery images={product.images} alt={product.name} eager={eager} />
       <div className="flex flex-1 flex-col gap-3 p-3 md:p-4">
         <H dir="ltr" className="line-clamp-3 text-[0.95rem] leading-snug rtl:text-right" title={product.name}>{product.name}</H>
-        <p className="tnum mt-auto text-lg font-semibold text-red-text">{formatPrice(product.price, lang)}</p>
+        {product.details && <Details lines={product.details} />}
+        {product.price === undefined ? (
+          <p className="mt-auto text-sm font-medium text-muted">{t.product.priceTbc}</p>
+        ) : (
+          <p className="tnum mt-auto text-lg font-semibold text-red-text">{formatPrice(product.price, lang)}</p>
+        )}
         <Stepper value={qty} onChange={setQty} />
         <Link to={orderPath(product.id, qty)} aria-label={t.product.orderItem(product.name)}
           className="btn-primary flex min-h-11 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-medium">

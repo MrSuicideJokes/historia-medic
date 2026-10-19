@@ -120,6 +120,54 @@ async function storefront() {
   console.log(`storefront: ${width}x${height} (ratio ${(width / height).toFixed(3)})`);
 }
 
+// Crocs collection: "Crocs <couleur> <n>.jpg", photos ordered by n (no number = 1; the "Cros"
+// spelling is accepted too). The 3:4 portraits are made square by extending the studio backdrop
+// sideways (edge pixels repeated), so no shoe gets cropped.
+// True when the left/right edge columns are a smooth backdrop (low brightness spread).
+async function edgesArePlain(file) {
+  const { data, info } = await sharp(file).rotate().resize(48, 64, { fit: 'fill' }).greyscale().raw().toBuffer({ resolveWithObject: true });
+  const edge = [];
+  for (let y = 0; y < info.height; y++) for (const x of [0, 1, info.width - 2, info.width - 1]) edge.push(data[y * info.width + x]);
+  const mean = edge.reduce((a, b) => a + b, 0) / edge.length;
+  const sd = Math.sqrt(edge.reduce((a, b) => a + (b - mean) ** 2, 0) / edge.length);
+  return sd < 18;
+}
+
+async function crocs() {
+  const dir = path.join(ROOT, 'assets/crocs collection');
+  const colors = new Map();
+  for (const file of fs.readdirSync(dir)) {
+    const m = path.parse(file).name.normalize('NFC').match(/^croc?s\s+(.+?)(?:\s+(\d+))?$/i);
+    if (!m) throw new Error(`crocs: unexpected file name "${file}"`);
+    const color = m[1].toLowerCase();
+    if (!colors.has(color)) colors.set(color, []);
+    colors.get(color).push({ file, n: Number(m[2] ?? 1) });
+  }
+  for (const [color, shots] of colors) {
+    shots.sort((a, b) => a.n - b.n);
+    const names = [];
+    for (const [i, { file }] of shots.entries()) {
+      const src = path.join(dir, file);
+      const { width, height } = await sharp(src).rotate().metadata();
+      const side = Math.max(0, Math.round((height - width) / 2));
+      const top = Math.max(0, Math.round((width - height) / 2));
+      // Close-ups fill the frame, so their edges are shoe, not backdrop: repeating them would smear.
+      // Those get a centre square crop instead.
+      const shaped = (await edgesArePlain(src))
+        ? sharp(src).rotate().extend({ left: side, right: side, top, bottom: top, extendWith: 'copy' })
+        : sharp(src).rotate().resize(Math.min(width, height), Math.min(width, height), { fit: 'cover' });
+      const square = await shaped.linear(await backdropGain(src), [0, 0, 0]).toBuffer();
+      const name = `crocs-${slugify(color)}-${i + 1}`;
+      names.push(name);
+      for (const w of SIZES) {
+        await sharp(square).resize(w, w).webp({ quality: 78, effort: 5 }).toFile(path.join(OUT, `${name}-${w}.webp`));
+      }
+    }
+    console.log(`Crocs ${color}\n  images: [${names.map((n) => `'${n}'`).join(', ')}]`);
+  }
+}
+
 await products();
 await logo();
 await storefront();
+await crocs();

@@ -4,6 +4,7 @@ import { normalizePhone, formatPhone } from './phone';
 import { buildMessage, whatsappUrl } from './whatsapp';
 import { orderPath, readOrder } from './order';
 import algeria from '../data/algeria.json';
+import { products } from '../data/products';
 
 const NB = ' ';
 
@@ -66,6 +67,27 @@ describe('whatsapp message', () => {
     const url = whatsappUrl(msg);
     expect(url.startsWith('https://wa.me/213770786471?text=Bonjour%20Historia%20Medic')).toBe(true);
     expect(decodeURIComponent(url.split('?text=')[1])).toBe(msg);
+  });
+});
+
+describe('whatsapp message without a price', () => {
+  it('asks the store to confirm the price', () => {
+    const msg = buildMessage(
+      { firstName: 'A', lastName: 'B', phone: '0770 78 64 71', wilaya: '25 - Constantine', commune: 'El Khroub' },
+      { name: 'Crocs LUOFU Noir', qty: 2 },
+    );
+    expect(msg.endsWith(
+      ['Produit : Crocs LUOFU Noir', 'Quantité : 2', 'Prix unitaire : à confirmer', '', '*Total : à confirmer*'].join('\n'),
+    )).toBe(true);
+  });
+});
+
+describe('crocs catalogue', () => {
+  it('has five colours, each with its photos and specs', () => {
+    const crocs = products.filter((p) => p.category === 'crocs');
+    expect(crocs.map((p) => p.name)).toEqual(['Crocs LUOFU Noir', 'Crocs LUOFU Beige', 'Crocs LUOFU Gris', 'Crocs LUOFU Vert pétrole', 'Crocs LUOFU Bleu nuit']);
+    expect(crocs.every((p) => p.price === 1800 && p.details?.length === 8 && p.images.length > 0)).toBe(true);
+    expect(crocs[0].images).toEqual(['crocs-noir-1', 'crocs-noir-2', 'crocs-noir-3', 'crocs-noir-4']);
   });
 });
 

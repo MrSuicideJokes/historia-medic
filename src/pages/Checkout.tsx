@@ -182,14 +182,20 @@ export default function Checkout() {
               <span>
                 <span dir="ltr" className="line-clamp-3 font-medium leading-snug rtl:text-right">{order.product.name}</span>
                 <span className="mt-1 block text-sm text-muted">
-                  {t.checkout.unitPrice} <span className="tnum">{formatPrice(order.product.price, lang)}</span>
+                  {order.product.price === undefined
+                    ? t.product.priceTbc
+                    : <>{t.checkout.unitPrice} <span className="tnum">{formatPrice(order.product.price, lang)}</span></>}
                 </span>
               </span>
             </div>
             <Stepper value={order.qty} onChange={setQty} className="mt-4 w-full" />
             <div className="mt-4 flex items-baseline justify-between gap-4 border-t-2 border-ink pt-3">
               <span className="font-medium">{t.checkout.total}</span>
-              <span className="tnum text-2xl font-semibold text-red-text">{formatPrice(order.qty * order.product.price, lang)}</span>
+              {order.product.price === undefined ? (
+                <span className="font-medium text-muted">{t.product.priceTbc}</span>
+              ) : (
+                <span className="tnum text-2xl font-semibold text-red-text">{formatPrice(order.qty * order.product.price, lang)}</span>
+              )}
             </div>
           </aside>
 

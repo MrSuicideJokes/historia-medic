@@ -5,7 +5,7 @@ import { MoonIcon, SunIcon } from './icons';
 import { Wordmark } from './Logo';
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
-  `relative inline-flex min-h-11 items-center px-1 text-[0.95rem] transition-colors hover:text-blue ${
+  `relative inline-flex min-h-11 items-center whitespace-nowrap px-1 text-[0.95rem] transition-colors hover:text-blue ${
     isActive ? 'font-medium text-ink after:absolute after:inset-x-1 after:bottom-1.5 after:h-0.5 after:bg-red' : 'text-muted'
   }`;
 

@@ -8,7 +8,7 @@ export const fr = {
   langLabel: 'Langue',
   darkMode: 'Mode sombre',
 
-  categories: { 'pese-personne': 'Pèse-personne', tensiometres: 'Tensiomètres', autres: 'Autres' } as Record<Category, string>,
+  categories: { 'pese-personne': 'Pèse-personne', tensiometres: 'Tensiomètres', crocs: 'Crocs et Sabots', autres: 'Autres' } as Record<Category, string>,
   all: 'Tous',
   productCount: (n: number) => plural(n, 'produit', 'produits'),
 
@@ -27,6 +27,8 @@ export const fr = {
 
   product: {
     order: 'Commander',
+    priceTbc: 'Prix à confirmer',
+    details: 'Caractéristiques',
     orderItem: (name: string) => `Commander ${name}`,
     qty: 'Quantité',
     decrease: 'Diminuer la quantité',

@@ -38,7 +38,12 @@ Everything store-specific is in **`src/config/store.ts`**:
 { id: 'omron-m2', name: 'Tensiomètre Omron M2', category: 'tensiometres', price: 9500, images: ['tensiometre-omron-m2', 'tensiometre-omron-m2-2'] },
 ```
 
-`category` is `'pese-personne'`, `'tensiometres'` or `'autres'`. Add `featured: true` to show it on the home page.
+`category` is `'pese-personne'`, `'tensiometres'`, `'crocs'` or `'autres'`. Add `featured: true` to show it on the home page.
+Leave `price` out to show "Prix à confirmer" (orders still go through; the WhatsApp message asks the shop to confirm the price).
+Add `details: ['…', '…']` for a folded "Caractéristiques" list on the card.
+
+The Crocs LUOFU range lives in `assets/crocs collection/` as `Crocs <couleur> <n>.jpg`; `npm run images`
+orders each colour's photos by `n` and squares them without cropping the shoes.
 No component changes are needed. Originals in `assets/` are never modified.
 
 ## Change a price
