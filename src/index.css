@@ -307,3 +307,14 @@
   26% { opacity: 0.6; }
   34%, 100% { opacity: 1; }
 }
+
+/* Photo viewer (components/Lightbox.tsx): dark, slightly shadowy backdrop; quick fade/zoom in. */
+.lightbox::backdrop { background: rgb(3 8 15 / 0.92); }
+@media (prefers-reduced-motion: no-preference) {
+  .lightbox[open] { animation: lightbox-in 180ms ease-out; }
+  .lightbox[open]::backdrop { animation: lightbox-fade 180ms ease-out; }
+  .lightbox[open] .lightbox-frame { animation: lightbox-pop 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+@keyframes lightbox-in { from { opacity: 0; } }
+@keyframes lightbox-fade { from { background: rgb(3 8 15 / 0); } }
+@keyframes lightbox-pop { from { transform: scale(0.94); } }

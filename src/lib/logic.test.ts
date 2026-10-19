@@ -3,6 +3,7 @@ import { formatPrice } from './format';
 import { normalizePhone, formatPhone } from './phone';
 import { buildMessage, whatsappUrl } from './whatsapp';
 import { orderPath, readOrder } from './order';
+import { clampView, IDENTITY, zoomAt } from './zoom';
 import algeria from '../data/algeria.json';
 import { products } from '../data/products';
 
@@ -112,6 +113,24 @@ describe('order from URL', () => {
   it('builds the checkout link the card uses', () => {
     expect(orderPath('coussin-vario', 2)).toBe('/checkout?p=coussin-vario&q=2');
     expect(read(orderPath('coussin-vario', 2).split('?')[1])!.qty).toBe(2);
+  });
+});
+
+describe('photo zoom', () => {
+  const size = { w: 400, h: 400 };
+
+  it('keeps the point under the fingers fixed', () => {
+    const p = { x: 100, y: -50 };
+    const v = zoomAt(IDENTITY, 2, p, size);
+    // image point under p before: (p - t) / s = (100, -50); after: same.
+    expect((p.x - v.x) / v.s).toBeCloseTo(100);
+    expect((p.y - v.y) / v.s).toBeCloseTo(-50);
+  });
+
+  it('clamps scale and keeps the image covering the frame', () => {
+    expect(zoomAt(IDENTITY, 50, { x: 0, y: 0 }, size).s).toBe(5);
+    expect(zoomAt({ s: 2, x: 100, y: 0 }, 0.2, { x: 0, y: 0 }, size)).toEqual({ s: 1, x: 0, y: 0 });
+    expect(clampView({ s: 2, x: 999, y: -999 }, size)).toEqual({ s: 2, x: 200, y: -200 });
   });
 });
 

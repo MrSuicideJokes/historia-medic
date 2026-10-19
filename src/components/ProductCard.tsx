@@ -5,6 +5,7 @@ import { formatPrice } from '../lib/format';
 import { orderPath } from '../lib/order';
 import { useLang } from '../state/lang';
 import { ArrowIcon, ChevronIcon } from './icons';
+import { Lightbox } from './Lightbox';
 import { ProductImage } from './ProductImage';
 import { Stepper } from './Stepper';
 
@@ -14,12 +15,29 @@ const zoom = 'transition-[transform,opacity] duration-500 ease-out group-hover:s
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Touch: swipeable scroll-snap strip with dots. Mouse: photos stacked, 2nd view fades in on hover.
+// Tapping/clicking a photo opens it full screen (Lightbox) at that photo.
 function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager: boolean }) {
   const { t } = useLang();
   const strip = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [viewing, setViewing] = useState<number | null>(null);
 
-  if (images.length === 1) return <div className="overflow-hidden bg-tile"><ProductImage name={images[0]} alt={alt} eager={eager} className={`mix-blend-multiply ${zoom}`} /></div>;
+  const photo = (name: string, i: number, buttonClass: string, imgClass: string) => (
+    <button key={name} type="button" onClick={() => setViewing(i)} aria-label={t.product.enlarge(alt, i + 1, images.length)}
+      className={`block w-full cursor-zoom-in ${buttonClass}`}>
+      <ProductImage name={name} alt="" eager={eager && i === 0} secondary={i > 0} className={imgClass} />
+    </button>
+  );
+  const viewer = viewing !== null && <Lightbox images={images} alt={alt} start={viewing} onClose={() => setViewing(null)} />;
+
+  if (images.length === 1) {
+    return (
+      <div className="overflow-hidden bg-tile">
+        {photo(images[0], 0, '', `mix-blend-multiply ${zoom}`)}
+        {viewer}
+      </div>
+    );
+  }
 
   const onScroll = () => {
     const el = strip.current!;
@@ -34,12 +52,11 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
           Blending each photo separately would multiply the hovered view into the one below it. */}
       <div ref={strip} onScroll={onScroll} role="group" aria-label={t.product.photos}
         className="flex snap-x snap-mandatory overflow-x-auto mix-blend-multiply overscroll-x-contain [scrollbar-width:none] pointer-fine:grid pointer-fine:overflow-hidden">
-        {images.map((name, i) => (
-          <ProductImage key={name} name={name} alt={i === 0 ? alt : ''} eager={eager && i === 0} secondary={i > 0}
-            className={`${zoom} shrink-0 snap-start pointer-fine:[grid-area:1/1] ${
-              i === 1 ? 'pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100' : i > 1 ? 'pointer-fine:hidden' : ''
-            }`} />
-        ))}
+        {images.map((name, i) =>
+          photo(name, i, `shrink-0 snap-start pointer-fine:[grid-area:1/1] ${
+            i === 1 ? 'pointer-fine:opacity-0 pointer-fine:transition-opacity pointer-fine:duration-500 pointer-fine:group-hover:opacity-100' : i > 1 ? 'pointer-fine:hidden' : ''
+          }`, zoom),
+        )}
       </div>
       <div className="absolute bottom-0 start-0 flex pointer-fine:hidden">
         {images.map((name, i) => (
@@ -49,6 +66,7 @@ function Gallery({ images, alt, eager }: { images: string[]; alt: string; eager:
           </button>
         ))}
       </div>
+      {viewer}
     </div>
   );
 }

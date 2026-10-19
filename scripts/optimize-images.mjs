@@ -110,14 +110,16 @@ async function logo() {
     .jpeg({ quality: 85 }).toFile(out('og-image.jpg'));
 }
 
-// Hero photo of the shop: keep its proportions, three widths for phones up to high-DPI desktops.
-async function storefront() {
-  const src = path.join(ROOT, 'assets/Storefront/Historia Medic boutique.jpg');
-  for (const w of [480, 800, 1200]) {
-    await sharp(src).rotate().resize({ width: w }).webp({ quality: 68, effort: 6 }).toFile(path.join(OUT, `storefront-${w}.webp`));
+// Home hero image (the shop's flyer). Mostly flat colour and lettering, so a higher quality keeps
+// the text crisp; widths stop at the source width (no upscaling).
+async function hero() {
+  const src = path.join(ROOT, 'assets/Storefront/Historia Medic affiche.jpg');
+  const { width } = await sharp(src).rotate().metadata();
+  for (const w of [480, width]) {
+    await sharp(src).rotate().resize({ width: w }).webp({ quality: 85, effort: 6 }).toFile(path.join(OUT, `hero-${w}.webp`));
   }
-  const { width, height } = await sharp(path.join(OUT, 'storefront-1200.webp')).metadata();
-  console.log(`storefront: ${width}x${height} (ratio ${(width / height).toFixed(3)})`);
+  const m = await sharp(path.join(OUT, `hero-${width}.webp`)).metadata();
+  console.log(`hero: ${m.width}x${m.height}`);
 }
 
 // Crocs collection: "Crocs <couleur> <n>.jpg", photos ordered by n (no number = 1; the "Cros"
@@ -169,5 +171,5 @@ async function crocs() {
 
 await products();
 await logo();
-await storefront();
+await hero();
 await crocs();

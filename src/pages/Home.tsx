@@ -46,23 +46,23 @@ function Hero() {
         </ul>
       </div>
 
-      {/* The shop itself, framed by the logo's double ring (the same badge as on its sign). */}
-      <figure className="relative mx-3 md:col-span-5 md:mx-0">
+      {/* The shop's flyer, framed by the logo's double ring. Width capped so the 2:3 poster doesn't tower. */}
+      <figure className="relative mx-auto w-full max-w-[22rem] md:col-span-5 md:max-w-[24rem]">
         <Rings className="pointer-events-none absolute -inset-[6%] text-red" gap={70} />
         <div className="relative animate-[slide-up_700ms_cubic-bezier(0.2,0.7,0.2,1)_both] overflow-hidden rounded-lg shadow-float">
           <img
-            src="/images/storefront-800.webp"
-            srcSet="/images/storefront-480.webp 480w, /images/storefront-800.webp 800w, /images/storefront-1200.webp 1200w"
-            sizes="(min-width: 76rem) 30rem, (min-width: 48rem) 40vw, 90vw"
-            width={1200}
-            height={1352}
+            src="/images/hero-853.webp"
+            srcSet="/images/hero-480.webp 480w, /images/hero-853.webp 853w"
+            sizes="(min-width: 48rem) 24rem, 22rem"
+            width={853}
+            height={1280}
             alt={t.home.storefrontAlt}
             fetchPriority="high"
             decoding="async"
             className="block h-auto w-full"
           />
         </div>
-        <figcaption className="absolute -bottom-4 start-4 inline-flex items-center gap-2 rounded-full border border-line bg-paper px-4 py-2 text-sm font-medium shadow-float">
+        <figcaption className="relative mt-4 flex w-fit items-center gap-2 rounded-full border border-line bg-paper px-4 py-2 text-sm font-medium shadow-float">
           <PinIcon width={16} height={16} className="text-red" />
           {t.home.storefront}
         </figcaption>

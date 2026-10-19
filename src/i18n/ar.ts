@@ -19,8 +19,8 @@ export const ar: Dict = {
     eyebrow: 'معدات طبية · قسنطينة',
     lead: 'معدات طبية ذات جودة في قسنطينة. اختاروا عبر الموقع، واطلبوا عبر واتساب.',
     cta: 'تصفّح المنتجات',
-    storefront: 'محلّنا في قسنطينة',
-    storefrontAlt: 'واجهة محل Historia Medic المضاءة في قسنطينة مساءً',
+    storefront: 'Historia Medic Parapharm · قسنطينة',
+    storefrontAlt: 'ملصق Historia Medic Parapharm: شعار HM، الهاتف 0770 78 64 71، فيسبوك وإنستغرام historiamedic25، تيك توك @Historiamedic، الموقع historia-medic.vercel.app',
     categoriesTitle: 'الفئات',
     featuredTitle: 'مختارات',
     seeAll: 'كل المنتجات',
@@ -38,6 +38,17 @@ export const ar: Dict = {
     increase: 'زيادة الكمية',
     view: (i, n) => `الصورة ${i} من ${n}`,
     photos: 'صور المنتج',
+    enlarge: (name, i, n) => `تكبير الصورة ${i} من ${n}: ${name}`,
+  },
+
+  lightbox: {
+    close: 'إغلاق',
+    zoomIn: 'تكبير',
+    zoomOut: 'تصغير',
+    prev: 'الصورة السابقة',
+    next: 'الصورة التالية',
+    hintTouch: 'باعدوا بإصبعين أو انقروا مرتين للتكبير',
+    hintMouse: 'استعملوا عجلة الفأرة أو انقروا مرتين للتكبير',
   },
 
   products: {

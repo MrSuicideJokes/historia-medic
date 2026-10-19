@@ -16,8 +16,8 @@ export const fr = {
     eyebrow: 'Matériel médical · Constantine',
     lead: 'Matériel médical de qualité à Constantine. Choisissez en ligne, commandez sur WhatsApp.',
     cta: 'Voir les produits',
-    storefront: 'Notre boutique à Constantine',
-    storefrontAlt: 'Façade illuminée de la boutique Historia Medic à Constantine, le soir',
+    storefront: 'Historia Medic Parapharm · Constantine',
+    storefrontAlt: 'Affiche Historia Medic Parapharm : logo HM, téléphone 0770 78 64 71, Facebook et Instagram historiamedic25, TikTok @Historiamedic, site historia-medic.vercel.app',
     categoriesTitle: 'Le catalogue',
     featuredTitle: 'Une sélection',
     seeAll: 'Tout le catalogue',
@@ -35,6 +35,17 @@ export const fr = {
     increase: 'Augmenter la quantité',
     view: (i: number, n: number) => `Photo ${i} sur ${n}`,
     photos: 'Photos du produit',
+    enlarge: (name: string, i: number, n: number) => `Agrandir la photo ${i} sur ${n} : ${name}`,
+  },
+
+  lightbox: {
+    close: 'Fermer',
+    zoomIn: 'Zoom avant',
+    zoomOut: 'Zoom arrière',
+    prev: 'Photo précédente',
+    next: 'Photo suivante',
+    hintTouch: 'Pincez ou touchez deux fois pour zoomer',
+    hintMouse: 'Molette ou double-clic pour zoomer',
   },
 
   products: {

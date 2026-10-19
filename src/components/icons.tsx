@@ -11,6 +11,7 @@ const Icon = ({ children, ...p }: P) => (
 
 export const PlusIcon = (p: P) => <Icon {...p}><path d="M12 5v14M5 12h14" /></Icon>;
 export const MinusIcon = (p: P) => <Icon {...p}><path d="M5 12h14" /></Icon>;
+export const CloseIcon = (p: P) => <Icon {...p}><path d="M6 6l12 12M18 6L6 18" /></Icon>;
 export const ChevronIcon = (p: P) => <Icon {...p}><path d="M6 9l6 6 6-6" /></Icon>;
 // Points "forward": mirrors in RTL.
 export const ArrowIcon = ({ className = '', ...p }: P) => (
